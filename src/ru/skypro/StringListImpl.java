@@ -4,15 +4,19 @@ import java.util.Arrays;
 
 public class StringListImpl implements StringList {
 
-    private String[] data = {};
-    private int size = 0;
-    private static int INITIAL_CAPACITY = 5;
+    private String[] data;
+    private int size;
+    private static final int DEFAULT_CAPACITY = 7;
 
     public StringListImpl() {
-        this.data = new String[INITIAL_CAPACITY];
+        this(DEFAULT_CAPACITY);
     }
 
+    public StringListImpl(int capacity) {
+        this.data = new String[capacity];
+    }
 
+    @Override
     public String add(String item) {
         checkIfItemIsNotNull(item);
         checkIfArrayIsNotFull();
@@ -20,28 +24,25 @@ public class StringListImpl implements StringList {
         return item;
     }
 
-    public String add(int index, String item) {
+    @Override
+    public String addWithIndex( int index, String item) {
         checkIfItemIsNotNull(item);
         checkIfArrayIsNotFull();
-        checkIndex(index);
-        System.arraycopy(data, index, data, index + 1, data.length - index);
-        data[size++] = item;
-        return item;
-//        int j = 0;
-//        for (int i = 0; i < size-1; i++) {
-//            if(i == index) {
-//                data[i] = item;
-//            } else {
-//                data [i] = data [j];
-//                j++;
-//            }
-//        } return item;
+        checkIfIndexIsValid(index);
+        if (index < size) {
+            for (int temp = size+1; temp > index; temp --) {
+                data[temp] = data[temp - 1];
+            } data [index] = item;
+            size++;
+            } else {
+            data [size++] = item;
+        } return item;
     }
 
     @Override
     public String set(int index, String item) {
         checkIfItemIsNotNull(item);
-        checkIndex(index);
+        checkIfIndexIsValid(index);
         data[index] = item;
         return item;
     }
@@ -50,16 +51,23 @@ public class StringListImpl implements StringList {
     public String remove(String item) {
         checkIfItemIsNotNull(item);
         checkIfItemExist(item);
-        int index = indexOf(item);
-        removeItem(index);
+        for (int i = 0; i < size; i++) {
+            if (data [i]. equals(item)) {
+                return removeByIndex(i);
+            }
+        }
         return item;
     }
 
     @Override
-    public String remove(int index) {
-        checkIndex(index);
+    public String removeByIndex(int index) {
+        checkIfIndexIsValid(index);
         String item = get(index);
-        removeItem(index);
+        for (int i=index; i<size-1; i++) {
+            data [i] = data [i+1];
+        }
+        data [size-1] = null;
+        size--;
         return item;
     }
 
@@ -92,38 +100,29 @@ public class StringListImpl implements StringList {
 
     @Override
     public String get(int index) {
-        checkIndex(index);
+        checkIfIndexIsValid(index);
         return data[index];
     }
 
     @Override
-    public boolean equals(StringList differentList) {
-        if (differentList == null) {
+    public boolean equals(StringList otherList) {
+        if (otherList == null) {
             return false;
         }
-        if (size != differentList.size()) {
+        if (size != otherList.size()) {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if (!get(i).equals((differentList.get(i)))) {
+            if (!get(i).equals((otherList.get(i)))) {
                 return false;
             }
-        } return true;
-    }
-
-    private void removeItem(int index) {
-        if (size - 1 > index) {
-            System.arraycopy(data, index + 1, data, index, data.length - index);
         }
-        data[--size] = null;
-    }
-
-    private void checkIfItemExist(String item) {
+        return true;
     }
 
     @Override
     public int size() {
-        return size();
+        return size;
     }
 
     @Override
@@ -133,7 +132,7 @@ public class StringListImpl implements StringList {
 
     @Override
     public void clear() {
-        data = new String[INITIAL_CAPACITY];
+        data = new String[DEFAULT_CAPACITY];
     }
 
     @Override
@@ -141,7 +140,13 @@ public class StringListImpl implements StringList {
         return Arrays.copyOf(data, data.length);
     }
 
-    private void checkIndex(int index) {
+    private void checkIfItemExist(String item) {
+        if (indexOf(item) == -1) {
+            throw new IllegalArgumentException("Item doesn't exist");
+        }
+    }
+
+    private void checkIfIndexIsValid(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Invalid index");
         }
@@ -153,20 +158,20 @@ public class StringListImpl implements StringList {
         }
     }
 
-    private String[] grow() {
-        return Arrays.copyOf(data, size * 2);
-    }
-
     private void checkIfItemIsNotNull(String item) {
         if (item == null) {
             throw new IllegalArgumentException("Item can't be null");
         }
     }
+    private String[] grow() {
+        return Arrays.copyOf(data, size * 2);
+    }
 
     public void printStringList() {
         System.out.print("StringList: ");
-        for (int i = 0; i < size; i++) {
-            System.out.print(data[i] + ", ");
+        for (int i = 0; i < size ; i++) {
+            System.out.print(data[i] + " ");
         }
+            System.out.println();
     }
 }

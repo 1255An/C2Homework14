@@ -14,7 +14,7 @@ public interface StringList {
         // выбросить исключение.
         // Вернуть добавленный элемент
         // в качестве результата выполнения.
-        String add(int index, String item);
+        String addWithIndex( int index, String item);
 
         // Установить элемент
         // на определенную позицию,
@@ -35,7 +35,7 @@ public interface StringList {
         // Вернуть удаленный элемент
         // или исключение, если подобный
         // элемент отсутствует в списке.
-        String remove(int index);
+        String removeByIndex(int index);
 
         // Проверка на существование элемента.
         // Вернуть true/false;
