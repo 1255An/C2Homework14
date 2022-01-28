@@ -69,18 +69,41 @@ public class IntegerListImpl implements IntegerList {
         }
         data[size - 1] = null;
         size--;
+        checkIfArrayLessThanHalfFull();
         return item;
     }
 
+//        @Override
+//    public void sortBubble() {
+//        for (int i = 0; i < size - 1; i++) {
+//            for (int j = 0; j < size - 1 - i; j++) {
+//                if (data[j] > data[j + 1]) {
+//                    swapElements(data, j, j + 1);
+//                }
+//            }
+//        }
+//    }
+
     @Override
-    public void sortBubble() {
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = 0; j < size - 1 - i; j++) {
-                if (data[j] > data[j + 1]) {
-                    swapElements(data, j, j + 1);
-                }
+    public void quickSort(int begin, int end) {
+        if (begin < end) {
+            Integer partitionIndex = partition(begin, end);
+            quickSort(begin, partitionIndex - 1);
+            quickSort(partitionIndex + 1, end);
+        }
+    }
+
+    private int partition(int begin, int end) {
+        int pivot = data[end];
+        int i = (begin - 1);
+        for (int j = begin; j < end; j++) {
+            if (data[j] <= pivot) {
+                i++;
+                swapElements(data, i, j);
             }
         }
+        swapElements(data, i + 1, end);
+        return i + 1;
     }
 
     private void swapElements(Integer[] data, int indexA, int indexB) {
@@ -192,18 +215,27 @@ public class IntegerListImpl implements IntegerList {
         }
     }
 
+    private Integer[] grow() {
+        return Arrays.copyOf(data, (size * 3 / 2));
+    }
+
     private void checkIfItemIsNotNull(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Item can't be null");
         }
     }
 
-    private Integer[] grow() {
-        return Arrays.copyOf(data, size * 2);
+    private void checkIfArrayLessThanHalfFull() {
+        if (size == (data.length / 2)) {
+            data = resize();
+        }
+    }
+
+    private Integer[] resize() {
+        return Arrays.copyOf(data, (size * 2 / 3));
     }
 
     public void printIntegerList() {
-        //    System.out.print("IntegerList: ");
         for (int i = 0; i < size; i++) {
             System.out.print(data[i] + " ");
         }

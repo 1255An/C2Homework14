@@ -102,8 +102,8 @@ public class Main {
         listInt.printIntegerList();
 
         //sorting
-        listInt.sortBubble();
-        System.out.print("Sorted list with bubble sorting: ");
+        listInt.quickSort(0, listInt.size() - 1);
+        System.out.print("Sorted list with quick sorting: ");
         listInt.printIntegerList();
 
         //contains

@@ -38,7 +38,7 @@ public interface IntegerList {
     Integer removeByIndex(int index);
 
     //Сортировка пузырьковым методом
-    void sortBubble();
+    void quickSort(int begin, int end);
 
     // Проверка на существование элемента.
     // Вернуть true/false;
