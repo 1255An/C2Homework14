@@ -18,7 +18,7 @@ public class IntegerListImpl implements IntegerList {
     @Override
     public Integer add(Integer item) {
         checkIfItemIsNotNull(item);
-        checkIfArrayIsNotFull();
+        lengthUpIfNeeded();
         data[size++] = item;
         return item;
     }
@@ -26,7 +26,7 @@ public class IntegerListImpl implements IntegerList {
     @Override
     public Integer addWithIndex(int index, Integer item) {
         checkIfItemIsNotNull(item);
-        checkIfArrayIsNotFull();
+        lengthUpIfNeeded();
         checkIfIndexIsValid(index);
         if (index < size) {
             for (int temp = size + 1; temp > index; temp--) {
@@ -69,7 +69,7 @@ public class IntegerListImpl implements IntegerList {
         }
         data[size - 1] = null;
         size--;
-        checkIfArrayLessThanHalfFull();
+        lengthDownIfNeeded();
         return item;
     }
 
@@ -209,7 +209,7 @@ public class IntegerListImpl implements IntegerList {
         }
     }
 
-    private void checkIfArrayIsNotFull() {
+    private void lengthUpIfNeeded() {
         if (size == data.length) {
             data = grow();
         }
@@ -225,7 +225,7 @@ public class IntegerListImpl implements IntegerList {
         }
     }
 
-    private void checkIfArrayLessThanHalfFull() {
+    private void lengthDownIfNeeded() {
         if (size == (data.length / 2)) {
             data = resize();
         }

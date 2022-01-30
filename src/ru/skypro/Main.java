@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
         //findTheFastestSort
-        /*
+     /*
         Integer[] array1 = generateRandomArray();
 
         Integer[] array2 = array1.clone();
@@ -71,7 +71,8 @@ public class Main {
         array[indexA] = array[indexB];
         array[indexB] = tmp;
     }
-         */
+
+*/
 
         //IntegerListDemo
 
